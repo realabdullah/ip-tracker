@@ -9,19 +9,33 @@
     </div>
 
     <div class="modal" id="modal">
-      <div v-if="!loading">
-        <span>Ip Address</span>
-        <p>{{ resultData.ip }}</p>
+      <div class="resultsec" v-if="!loading">
+        <div>
+          <span>Ip Address</span>
+          <p>{{ resultData.ip }}</p>
+        </div>
+        
+        <div class="line"></div>
 
-        <span>Location</span>
-        <p>{{ resultData.city + ', ' + resultData.region + ', ' + resultData.location }}</p>
+        <div>
+          <span>Location</span>
+          <p>{{ resultData.city + ', ' + resultData.region + ', ' + resultData.location }}</p>
+        </div>
+        
+        <div class="line"></div>
 
-        <span>Timezone</span>
-        <p>{{ resultData.timezone }}</p>
+        <div>
+          <span>Timezone</span>
+          <p>{{ resultData.timezone }}</p>
+        </div>
+        
+        <div class="line"></div>
 
-        <span>Isp</span>
-        <p>{{ resultData.isp }}</p>
-
+        <div>
+          <span>Isp</span>
+          <p>{{ resultData.isp }}</p>
+        </div>
+        
         <div @click="close" class="close">
           close
         </div>
@@ -180,5 +194,26 @@ p {
   background: url('./assets/images/map.jpg');
   background-size: cover;
   background-repeat: no-repeat;
+}
+@media(min-width: 800px) {
+  .input {
+    width: 80%;
+    margin: auto;
+  }
+  .resultsec {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+  }
+  .line {
+    width: 1.5px;
+    height: 58px;
+    margin: 10px;
+    background-color: hsl(0, 1%, 41%);
+  }
+  .close {
+    display: none;
+  }
 }
 </style>
