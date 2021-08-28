@@ -4,25 +4,30 @@
     <div class="input">
       <input type="text" v-model="myIp" placeholder="Search for any IP address or domain">
       <p @click="findIt">
-        <img src="./assets/images/icon-arrow.svg" alt="icon">
+        <img class="arrow" src="./assets/images/icon-arrow.svg" alt="icon">
       </p>
     </div>
 
     <div class="modal" id="modal">
-      <span>Ip Address</span>
-      <p>{{ resultData.ip }}</p>
+      <div v-if="!loading">
+        <span>Ip Address</span>
+        <p>{{ resultData.ip }}</p>
 
-      <span>Location</span>
-      <p>{{ resultData.location }}</p>
+        <span>Location</span>
+        <p>{{ resultData.location }}</p>
 
-      <span>Timezone</span>
-      <p>{{ resultData.timezone }}</p>
+        <span>Timezone</span>
+        <p>{{ resultData.timezone }}</p>
 
-      <span>Isp</span>
-      <p>{{ resultData.isp }}</p>
+        <span>Isp</span>
+        <p>{{ resultData.isp }}</p>
 
-      <div @click="close" class="close">
-        close
+        <div @click="close" class="close">
+          close
+        </div>
+      </div>
+      <div v-else>
+        <img :src="loadingImage"/>
       </div>
     </div>
   </div>
@@ -40,6 +45,9 @@ export default {
     const myIp = ref('')
     const abd = myIp.value
     const ipResult = ref([])
+    const loading = ref(true)
+    const loadingImage = require('./assets/load.svg')
+
     const resultData = reactive({
       ip: '',
       location: '',
@@ -48,6 +56,7 @@ export default {
     })
 
     const findIt = async () => {
+      document.getElementById('modal').style.display = 'block'
       var api_key = 'at_lh7Y3Y5INgArPaCYvbp8IflKq6nDp';
       var api_url = 'https://geo.ipify.org/api/v1?';
       var url = api_url + 'apiKey=' + api_key + '&ipAddress=' + myIp.value;
@@ -59,7 +68,7 @@ export default {
         resultData.timezone = ipResult.value.location.timezone
         resultData.isp = ipResult.value.isp
         console.log(resultData.ip)
-        document.getElementById('modal').style.display = 'block'
+        loading.value = false
         myIp.value = ''
       })
       .catch(error => {
@@ -76,7 +85,9 @@ export default {
       findIt,
       resultData,
       close,
-      abd
+      abd,
+      loading,
+      loadingImage
     }
   }
 }
@@ -122,7 +133,7 @@ p {
   text-decoration: none;
   margin-top: 5px;
 }
-img {
+.arrow {
   background: #000;
   padding: 16px;
   border-radius: 0 8px 8px 0;
