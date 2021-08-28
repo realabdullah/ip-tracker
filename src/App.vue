@@ -2,7 +2,7 @@
 <div class="header">
     <h2>IP Address Tracker</h2>
     <div class="input">
-      <input type="text" placeholder="Search for any IP address or domain">
+      <input type="text" v-model="myIp" placeholder="Search for any IP address or domain">
       <p @click="findIt">
         <img src="./assets/images/icon-arrow.svg" alt="icon">
       </p>
@@ -20,6 +20,10 @@
 
       <span>Isp</span>
       <p>{{ resultData.isp }}</p>
+
+      <div @click="close" class="close">
+        close
+      </div>
     </div>
   </div>
   <div class="map-area">
@@ -33,6 +37,8 @@ import { ref, reactive } from 'vue'
 
 export default {
   setup() {
+    const myIp = ref('')
+    const abd = myIp.value
     const ipResult = ref([])
     const resultData = reactive({
       ip: '',
@@ -42,7 +48,10 @@ export default {
     })
 
     const findIt = async () => {
-      axios.get('https://geo.ipify.org/api/v1?apiKey=at_lh7Y3Y5INgArPaCYvbp8IflKq6nDp&ipAddress=8.8.8.8')
+      var api_key = 'at_lh7Y3Y5INgArPaCYvbp8IflKq6nDp';
+      var api_url = 'https://geo.ipify.org/api/v1?';
+      var url = api_url + 'apiKey=' + api_key + '&ipAddress=' + myIp.value;
+      axios.get(url)
       .then(response => {
         ipResult.value = response.data
         resultData.ip = ipResult.value.ip
@@ -51,15 +60,23 @@ export default {
         resultData.isp = ipResult.value.isp
         console.log(resultData.ip)
         document.getElementById('modal').style.display = 'block'
+        myIp.value = ''
       })
       .catch(error => {
         console.log(error)
       })
     }
 
+    const close = () => {
+      document.getElementById('modal').style.display = 'none'
+    }
+
     return {
+      myIp,
       findIt,
-      resultData
+      resultData,
+      close,
+      abd
     }
   }
 }
@@ -134,6 +151,15 @@ img {
   font-weight: 500;
   font-size: 18px;
 }
+.close {
+  cursor: pointer;
+  padding: 10px;
+  border: 2px solid #4f5abc;
+  font-weight: bold;
+  width: 70px;
+  color: #4f5abc;
+}
+
 .map-area {
   min-height: 50vh;
   background: url('./assets/images/map.jpg');
