@@ -14,7 +14,7 @@
         <p>{{ resultData.ip }}</p>
 
         <span>Location</span>
-        <p>{{ resultData.location }}</p>
+        <p>{{ resultData.city + ', ' + resultData.region + ', ' + resultData.location }}</p>
 
         <span>Timezone</span>
         <p>{{ resultData.timezone }}</p>
@@ -51,6 +51,8 @@ export default {
     const resultData = reactive({
       ip: '',
       location: '',
+      city: '',
+      region: '',
       timezone: '',
       isp: ''
     })
@@ -65,9 +67,11 @@ export default {
         ipResult.value = response.data
         resultData.ip = ipResult.value.ip
         resultData.location = ipResult.value.location.country
+        resultData.city = ipResult.value.location.city
+        resultData.region = ipResult.value.location.region
         resultData.timezone = ipResult.value.location.timezone
-        resultData.isp = ipResult.value.isp
-        console.log(resultData.ip)
+        resultData.isp = ipResult.value.as.name
+        console.log(ipResult.value)
         loading.value = false
         myIp.value = ''
       })
